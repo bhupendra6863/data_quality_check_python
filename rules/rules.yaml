@@ -1,0 +1,12 @@
+# Example data quality rules
+duplicate_check:
+  columns: ["id"]
+null_check:
+  columns: ["name", "age", "email"]
+range_check:
+  column: "age"
+  min: 18
+  max: 99
+starts_with:
+  column: "name"
+  prefix: "J"
