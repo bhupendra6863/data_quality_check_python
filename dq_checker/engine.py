@@ -12,19 +12,25 @@ class DQEngine:
         'regex_check_signup_date': RegexCheckSignupDateRule,
     }
 
-    def __init__(self, data_path, rules_path):
-        self.data_path = data_path
-        self.rules_path = rules_path
-        try:
-            self.df = pd.read_csv(data_path)
-        except Exception as e:
-            raise RuntimeError(f"Error loading data file '{data_path}': {e}")
-        try:
-            with open(rules_path, 'r') as f:
-                rules_yaml = yaml.safe_load(f)
-                self.rules = rules_yaml['rules']
-        except Exception as e:
-            raise RuntimeError(f"Error loading rules file '{rules_path}': {e}")
+    def __init__(self, data_path=None, rules_path=None, df=None, rules=None):
+        # If df and rules are provided, use them (for testing)
+        if df is not None and rules is not None:
+            self.df = df
+            self.rules = rules
+        # Otherwise, load from files (normal usage)
+        else:
+            self.data_path = data_path
+            self.rules_path = rules_path
+            try:
+                self.df = pd.read_csv(data_path)
+            except Exception as e:
+                raise RuntimeError(f"Error loading data file '{data_path}': {e}")
+            try:
+                with open(rules_path, 'r') as f:
+                    rules_yaml = yaml.safe_load(f)
+                    self.rules = rules_yaml['rules']
+            except Exception as e:
+                raise RuntimeError(f"Error loading rules file '{rules_path}': {e}")
 
     def run(self):
         results = {}
