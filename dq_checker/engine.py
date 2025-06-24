@@ -1,6 +1,6 @@
 import pandas as pd
 import yaml
-from .rules import DuplicateCheckRule, NullCheckRule, RangeCheckRule, StartsWithRule
+from .rules import DuplicateCheckRule, NullCheckRule, RangeCheckRule, StartsWithRule, RegexCheckEmailRule, RegexCheckSignupDateRule
 
 class DQEngine:
     RULE_MAPPING = {
@@ -8,6 +8,8 @@ class DQEngine:
         'null_check': NullCheckRule,
         'range_check': RangeCheckRule,
         'starts_with': StartsWithRule,
+        'regex_check_email': RegexCheckEmailRule,
+        'regex_check_signup_date': RegexCheckSignupDateRule,
     }
 
     def __init__(self, data_path, rules_path):
@@ -16,15 +18,7 @@ class DQEngine:
         self.df = pd.read_csv(data_path)
         with open(rules_path, 'r') as f:
             rules_yaml = yaml.safe_load(f)
-            # Support both list and dict style YAML for backward compatibility
-            if isinstance(rules_yaml, dict) and 'rules' in rules_yaml:
-                self.rules = rules_yaml['rules']
-            else:
-                # Convert dict style to list of rules
-                self.rules = [
-                    {'type': k, **(v if isinstance(v, dict) else {})}
-                    for k, v in rules_yaml.items()
-                ]
+            self.rules = rules_yaml['rules']
 
     def run(self):
         results = {}

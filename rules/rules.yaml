@@ -1,12 +1,18 @@
-# Example data quality rules
-duplicate_check:
-  columns: ["id"]
-null_check:
-  columns: ["name", "age", "email"]
-range_check:
-  column: "age"
-  min: 18
-  max: 99
-starts_with:
-  column: "name"
-  prefix: "J"
+rules:
+  - type: duplicate_check
+    columns: ["name"]
+  - type: null_check
+    columns: ["name", "age", "email"]
+  - type: range_check
+    columns: "age"
+    min: 18
+    max: 90
+  - type: starts_with
+    columns: "name"
+    prefix: "B"
+  - type: regex_check_email
+    column: email
+    pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+  - type: regex_check_signup_date
+    column: signup_date
+    pattern: "^\\d{4}-\\d{2}-\\d{2}$"
